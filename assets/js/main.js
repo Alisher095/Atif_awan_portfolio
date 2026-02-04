@@ -201,6 +201,119 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 
+  const featuredProjectsData = [
+    {
+      title: 'Pakistan Traveling Assistant',
+      description:
+        'A comprehensive travel platform with intelligent destination recommendations, trip planning algorithms, and real-time data processing.',
+      image: 'assets/images/pak_trv.png',
+      alt: 'Pakistan Traveling Assistant',
+      tech: ['Python', 'FastAPI', 'PostgreSQL', 'Redis'],
+      status: 'Backend Complete',
+      iconClass: 'fas fa-plane',
+      highlight: true
+    },
+    {
+      title: 'Event Management System',
+      description:
+        'Full-featured event management platform with role-based access control, real-time notifications, and automated scheduling.',
+      image: 'assets/images/image.png',
+      alt: 'Event Management System',
+      tech: ['Python', 'Django', 'PostgreSQL', 'Celery'],
+      status: 'Production Ready',
+      iconClass: 'fas fa-calendar-alt',
+      highlight: true
+    },
+    {
+      title: 'Automated Lectures System',
+      description:
+        'AI-powered lecture automation system with smart scheduling, content distribution, and performance analytics.',
+      image: 'assets/images/automated_lectures.png',
+      alt: 'Automated Lectures System',
+      tech: ['Python', 'Flask', 'SQLite', 'Machine Learning'],
+      status: 'In Development',
+      iconClass: 'fas fa-chalkboard-teacher',
+      highlight: true
+    },
+    {
+      title: 'Kids Coding LMS',
+      description:
+        'A learning platform for young coders featuring guided lessons, progress tracking, and interactive challenges.',
+      image: 'assets/images/kidicode.png',
+      alt: 'Kids Coding LMS',
+      tech: ['Python', 'Django', 'PostgreSQL'],
+      status: 'Backend Complete',
+      iconClass: 'fas fa-child',
+      highlight: true
+    },
+    {
+      title: 'Lucky Draw System',
+      description:
+        'A fair draw system handling participants, entries, and randomized winners with complete admin oversight.',
+      image: 'assets/images/lucky.png',
+      alt: 'Lucky Draw System',
+      tech: ['PHP', 'JavaScript', 'MySQL'],
+      status: 'Production Ready',
+      iconClass: 'fas fa-dice',
+      highlight: true
+    },
+    {
+      title: 'Trace Fake',
+      description:
+        'A verification backend that evaluates submissions against trusted data to highlight duplicates and fake records.',
+      image: 'assets/images/trace.png',
+      alt: 'Trace Fake',
+      tech: ['Python', 'FastAPI', 'PostgreSQL'],
+      status: 'Backend Complete',
+      iconClass: 'fas fa-shield-alt',
+      highlight: true
+    }
+  ];
+
+  const featuredRotator = document.getElementById('featured-projects-rotator');
+  const featuredSlots = featuredRotator ? featuredRotator.querySelectorAll('.project-card') : [];
+
+  const pickRandomProjects = () => {
+    const pool = [...featuredProjectsData];
+    const targetCount = Math.min(featuredSlots.length, pool.length);
+    const selected = [];
+
+    while (selected.length < targetCount && pool.length > 0) {
+      const index = Math.floor(Math.random() * pool.length);
+      selected.push(pool.splice(index, 1)[0]);
+    }
+
+    return selected;
+  };
+
+  const renderFeaturedProjects = (projects) => {
+    featuredSlots.forEach((slot, index) => {
+      const project = projects[index];
+
+      if (!project) {
+        slot.style.display = 'none';
+        return;
+      }
+
+      slot.style.display = '';
+      slot.querySelector('.project-thumb').src = project.image;
+      slot.querySelector('.project-thumb').alt = project.alt;
+      slot.querySelector('.project-icon i').className = project.iconClass;
+      slot.querySelector('h3').textContent = project.title;
+      slot.querySelector('.project-description').textContent = project.description;
+      slot.querySelector('.project-tech').innerHTML = project.tech.map(tech => `<span>${tech}</span>`).join('');
+      slot.querySelector('.status-text').textContent = project.status;
+      slot.querySelector('.status-dot').classList.toggle('active', !!project.highlight);
+    });
+  };
+
+  if (featuredSlots.length) {
+    renderFeaturedProjects(pickRandomProjects());
+    setInterval(() => {
+      renderFeaturedProjects(pickRandomProjects());
+    }, 3000);
+  }
+
   // Parallax effect for floating shapes
   window.addEventListener('scroll', () => {
     const scrolled = window.pageYOffset;
